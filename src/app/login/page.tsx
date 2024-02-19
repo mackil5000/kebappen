@@ -1,21 +1,64 @@
 "use client";
-import { useRouter } from "next/navigation";
-import React from "react";
+
+import React, { useState } from "react";
+import "./login.scss";
 
 type Props = {};
 
 const Login = (props: Props) => {
-  const router = useRouter();
-  const handleLoginClick = () => {
-    router.push(
-      "https://api.instagram.com/oauth/authorize?client_id=2878233172317869&redirect_uri=https://localhost:3000/api/auth&scope=user_profile,user_media&response_type=code"
-    );
+  const [credentials, setCredentials] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleInputChange = (event) => {
+    const key = event.target.name;
+    const value = event.target.value;
+    setCredentials({
+      ...credentials,
+      [key]: value,
+    });
   };
+
+  console.log(credentials);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    console.log("Submitted!");
+  };
+
   return (
-    <div>
-      <button onClick={handleLoginClick}>Login</button>
-    </div>
+    <>
+      <Navbar />
+      <div className="wrapper">
+        <div className="login-contain">
+          <h1>Logga in på Kebappen</h1>
+          <form onSubmit={handleSubmit}>
+            <input
+              name="username"
+              value={credentials.username}
+              type="text"
+              placeholder="Användarnamn"
+              onChange={handleInputChange}
+            />
+            <input
+              name="password"
+              value={credentials.password}
+              type="password"
+              placeholder="Lösenord"
+              onChange={handleInputChange}
+            />
+            <input type="submit" />
+          </form>
+        </div>
+      </div>
+    </>
   );
+};
+
+const Navbar = () => {
+  return <nav></nav>;
 };
 
 export default Login;
