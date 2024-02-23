@@ -26,7 +26,7 @@ export const GET = async (req: Request) => {
         client_secret: process.env.INSTAGRAM_CLIENT_SECRET,
         grant_type: "authorization_code",
         redirect_uri: process.env.INSTAGRAM_REDIRECT_URI,
-        code,
+        token,
       }),
     }
   );
