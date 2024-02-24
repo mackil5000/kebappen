@@ -2,16 +2,24 @@
 
 import React, { useState } from "react";
 import "./login.scss";
+import { useRouter } from "next/navigation";
 
+interface LoginResponse {
+  success: boolean;
+  message: string;
+}
 type Props = {};
 
 const Login = (props: Props) => {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState(null);
   const [credentials, setCredentials] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
   const handleInputChange = (event) => {
+    if (errorMessage !== null) setErrorMessage(null);
     const key = event.target.name;
     const value = event.target.value;
     setCredentials({
@@ -20,12 +28,23 @@ const Login = (props: Props) => {
     });
   };
 
-  console.log(credentials);
-
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    console.log("Submitted!");
+    async function authenticate() {
+      const res = await fetch("/api/signin", {
+        method: "POST",
+        body: JSON.stringify(credentials),
+      });
+      const data: LoginResponse = await res.json();
+
+      if (data.success) {
+        router.push("/admin/dashboard");
+      } else {
+        setErrorMessage(data.message);
+      }
+    }
+    authenticate();
   };
 
   return (
@@ -36,8 +55,8 @@ const Login = (props: Props) => {
           <h1>Logga in på Kebappen</h1>
           <form onSubmit={handleSubmit}>
             <input
-              name="username"
-              value={credentials.username}
+              name="email"
+              value={credentials.email}
               type="text"
               placeholder="Användarnamn"
               onChange={handleInputChange}
@@ -51,6 +70,9 @@ const Login = (props: Props) => {
             />
             <input type="submit" />
           </form>
+          {errorMessage ? (
+            <p className="message-error">{errorMessage}</p>
+          ) : null}
         </div>
       </div>
     </>
