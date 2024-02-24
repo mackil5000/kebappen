@@ -10,9 +10,25 @@ export const POST = async (req: Request) => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Store username and hashed password in KVS
-    await kv.set(`user_${email}`, hashedPassword);
+    const credentials = await kv.set(`user_${email}`, hashedPassword);
 
-    return new Response("User registered successfully");
+    console.log(credentials);
+
+    if (credentials !== "OK") {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          message: "Something went wrong when trying to create a user",
+        })
+      );
+    }
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        message: "User registered successfully",
+      })
+    );
   } catch (error) {
     return new Response("Internal server error");
   }

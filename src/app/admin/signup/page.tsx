@@ -2,10 +2,15 @@
 
 import React, { useState } from "react";
 import "./signup.scss";
+import { useRouter } from "next/navigation";
 
 type Props = {};
 
 const Signup = (props: Props) => {
+  const [disabled, setDisabled] = useState(false);
+
+  const router = useRouter();
+
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -21,14 +26,28 @@ const Signup = (props: Props) => {
   };
 
   const handleSubmit = (event) => {
+    setDisabled(true);
     event.preventDefault();
 
-    fetch("/api/signup", {
-      method: "POST",
-      body: JSON.stringify(credentials),
-    })
-      .then((res) => res.text())
-      .then((data) => console.log(data));
+    const signup = async () => {
+      try {
+        const res = await fetch("/api/signup", {
+          method: "POST",
+          body: JSON.stringify(credentials),
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          router.push("/admin/login");
+        }
+      } catch (err) {
+        console.error("din jävla sopa");
+      } finally {
+        setDisabled(false);
+      }
+    };
+
+    signup();
   };
 
   return (
@@ -52,7 +71,7 @@ const Signup = (props: Props) => {
               placeholder="Lösenord"
               onChange={handleInputChange}
             />
-            <input type="submit" />
+            <SubmitButton disabled={disabled} />
           </form>
         </div>
       </div>
@@ -62,6 +81,13 @@ const Signup = (props: Props) => {
 
 const Navbar = () => {
   return <nav></nav>;
+};
+
+type SBProps = { disabled: boolean };
+
+const SubmitButton = ({ disabled }: SBProps) => {
+  console.log(disabled);
+  return <input type="submit" value="Skicka" disabled={disabled} />;
 };
 
 export default Signup;

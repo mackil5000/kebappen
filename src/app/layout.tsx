@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles.scss";
 import { useEffect, useState } from "react";
-import validateToken from "./actions";
 
 const inter = Inter({ subsets: ["latin"] });
 

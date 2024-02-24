@@ -1,7 +1,7 @@
 import { kv } from "@vercel/kv";
 import { cookies } from "next/headers";
 
-export async function validateToken() {
+export default async function validateToken() {
   // return early if required cookies are missing
   if (!cookies().has("currentUserEmail") && !cookies().has("sessionToken")) {
     return {
