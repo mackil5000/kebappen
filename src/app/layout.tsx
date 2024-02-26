@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./styles.scss";
-import { useEffect, useState } from "react";
+import "./assets/styles.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -9,14 +8,6 @@ export const metadata: Metadata = {
   title: "Kebappen",
   description: "Kebappen",
 };
-
-function Loading() {
-  return (
-    <div>
-      <h1>Loading</h1>
-    </div>
-  );
-}
 
 export default async function RootLayout({
   children,

@@ -9,14 +9,14 @@ export async function middleware(request: NextRequest) {
     let email = request.cookies.get("currentUserEmail");
 
     if (!token || !email) {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+      return NextResponse.redirect(new URL("/admin/signin", request.url));
     }
 
     const res = await validateToken();
     if (res.success) {
       console.log("User is authenticated");
     } else {
-      return NextResponse.redirect(new URL("/admin/login", request.url));
+      return NextResponse.redirect(new URL("/admin/signin", request.url));
     }
   }
 }

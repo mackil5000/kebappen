@@ -1,5 +1,6 @@
 import React from "react";
 import clientPromise from "@/lib/mongodb";
+import Map from "./Map";
 
 type Props = {};
 
@@ -20,7 +21,6 @@ export async function getAllReviews() {
 
 const Home = async (props: Props) => {
   const data = await getAllReviews();
-  console.log(data[0].body);
   return (
     <div>
       <h1>{data[0].title}</h1>
@@ -31,6 +31,8 @@ const Home = async (props: Props) => {
         }}
       ></p>
       <p>Betyg: {data[0].rating}</p>
+      <hr />
+      <Map />
     </div>
   );
 };
